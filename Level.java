@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 //TextWorld 4
 
 public class Level {
@@ -21,9 +23,8 @@ public class Level {
         n1 = nodes.get(name1);
         n2 = nodes.get(name2);
 
-        if(n1 == null || n2 == null) System.out.println("Cannot add edge");
+        if(n1 == null || n2 == null) System.out.println("Cannot Add edge");
         else n1.addNeighbors(n2);
-
     }
 
     public void addUndirectedEdge(String name1, String name2) {
@@ -33,6 +34,13 @@ public class Level {
 
     public Room getNode(String name) {
         return nodes.get(name);
+    }
+
+    public ArrayList<Room> getRooms() {
+        HashMap<String, Level.Room> map = nodes;
+        ArrayList<Level.Room> rooms = new ArrayList<Level.Room>(map.values());
+
+        return rooms;
     }
 
     public class Room {
@@ -45,7 +53,7 @@ public class Level {
 
         public void setDescription(String description) {
             this.description = description;
-            creatures = new ArrayList<Creature>();
+
         }
 
         private Room(String name, String description) {
@@ -53,31 +61,44 @@ public class Level {
             this.name = name;
             this.description = description;
             items = new ArrayList<Item>();
+            creatures = new ArrayList<Creature>();
         }
         public ArrayList<Item> getItems() {
             return items;
         }
 
-        public void displayItemList() {
-            System.out.print("Items : ");
+        public String displayItemList() {
+            String itemlist = "Items in this room : ";
             for (Item n : items) {
-                System.out.print(n.getName() + ", ");
+                itemlist += n.getName() + ", ";
             }
+
+            return itemlist;
         }
 
         public void addItem(Item n) {
             items.add(n);
         }
 
-        public Item removeItem(String name) {
+        public void removeItem(String name) {
+            boolean isRemoved = false;
             Item removeItem = null;
-            for (Item n : items) {
-                if (n.getName().equals(name)){
-                    removeItem = n;
-                    items.remove(n);
+            Iterator<Item> iterator;
+
+            for (iterator = items.iterator(); iterator.hasNext(); ) {
+                removeItem = iterator.next();
+                if(removeItem.getName().equals(name)) {
+                    iterator.remove();
+                    isRemoved = true;
                 }
             }
-            return removeItem;
+
+            if(isRemoved == true) {
+                System.out.println(name + " is removed from the room");
+            } else {
+                System.out.println("No item called " + name + " in this room");
+            }
+
         }
 
         public void addNeighbors(Room n) {
@@ -109,16 +130,49 @@ public class Level {
             creatures.add(c);
         }
 
-        public boolean removeCreature(Creature c) {
-            return creatures.remove(c);
+        public  void removeCreature(Creature c) {
+            Creature creature = null;
+            Iterator<Creature> iter;
+
+            for (iter = creatures.iterator(); iter.hasNext(); ) {
+                creature = iter.next();
+                if(creature.getType().equals(c.getType())) {
+                    iter.remove();
+                }
+            }
+        }
+
+        public void destroyCreature(Creature c) {
+            creatures.remove(c);
         }
 
         public ArrayList<Creature> getCreatures() {
             return creatures;
         }
 
-        public Creature getGetCreature(int i) {
-            return creatures.get(i);
+
+
+        public void moveAllCreatures() {
+            for(Creature c: creatures) {
+                if(c.getIsMoved() == false ) {
+                    c.move();
+                }
+            }
+        }
+
+        public String displayCreatures() {
+            String creatureList = "Creatures : ";
+            for (Creature c : creatures) {
+                creatureList += c.getType() + ", ";
+            }
+
+            return creatureList;
+        }
+
+        public void resetIsMoved() {
+            for (Creature c: creatures) {
+                c.setIsMovedToFalse();
+            }
         }
     }
 }

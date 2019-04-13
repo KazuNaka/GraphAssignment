@@ -1,7 +1,8 @@
 public class Chicken extends Creature {
 
     public Chicken(Level.Room n) {
-        super(n);
+        type = "Chicken";
+        setCurrentroom(n);
     }
 
     @Override

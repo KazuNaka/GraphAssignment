@@ -8,6 +8,7 @@ public class Player {
     public Player(String n, String d) {
         name = n;
         description = d;
+        items = new ArrayList<Item>();
     }
 
     public void addItem(Item item) {
@@ -35,10 +36,11 @@ public class Player {
     }
 
     public void displayInventory() {
-        System.out.print("Items : ");
+        System.out.print("Player's Inventory : ");
         for (Item item: items) {
             System.out.print(item.getName() + ", ");
         }
+        System.out.println("");
     }
 
     public Level.Room getCurrentroom(){
@@ -55,5 +57,17 @@ public class Player {
             return true;
         }
         else return false;
+    }
+
+    public ArrayList<Item> getItems() {
+        return items;
+    }
+
+    public Item getItem(String name) {
+        for (Item n : items) {
+            if (n.getName().equals(name)) return n;
+        }
+
+        return null;
     }
 }

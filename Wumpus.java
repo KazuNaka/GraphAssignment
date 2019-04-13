@@ -4,7 +4,8 @@ import java.util.HashMap;
 public class Wumpus extends Creature {
 
     public Wumpus(Level.Room n) {
-        super(n);
+        type = "Wumpus";
+        setCurrentroom(n);
     }
     @Override
     protected void move() {
@@ -12,6 +13,7 @@ public class Wumpus extends Creature {
         ArrayList<Level.Room> rooms = new ArrayList<Level.Room>(map.values());
 
         if(rooms.contains(currentPlayerRoom)) {
+            System.out.println("Wumpus is close!");
             rooms.remove(currentPlayerRoom);
             int temp = (int)(Math.random() * rooms.size());
 
@@ -20,6 +22,7 @@ public class Wumpus extends Creature {
             currentroom.removeCreature(this);
             setCurrentroom(next);
             currentroom.addCreature(this);
+            isMoved = true;
 
         } else {
             randomMove();

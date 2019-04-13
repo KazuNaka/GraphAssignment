@@ -5,12 +5,12 @@ public abstract class Creature {
     protected Level.Room currentroom;
     protected Level.Room currentPlayerRoom;
     protected Player p;
+    protected String type;
+    protected boolean isMoved = false;
 
-    public Creature(Level.Room n) {
-        setCurrentroom(n);
-        currentPlayerRoom = p.getCurrentroom();
+    public String getType() {
+        return type;
     }
-
     protected abstract void move();
 
     protected Level.Room getCurrentroom() {
@@ -40,7 +40,15 @@ public abstract class Creature {
         currentroom.removeCreature(this);
         setCurrentroom(next);
         currentroom.addCreature(this);
+        isMoved = true;
     }
 
 
+    public boolean getIsMoved() {
+        return isMoved;
+    }
+
+    public  void setIsMovedToFalse() {
+        isMoved = false;
+    }
 }
